@@ -4,15 +4,15 @@ import bunFilesystemAdapter from "@njinlabs/njin/adapters/bun_filesystem";
 export default defineConfig({
   port: Number(process.env.PORT ?? 3000),
   db: {
-    path: process.env.DB_PATH ?? "rocksdb://data",
+    path: process.env.DB_PATH ?? "wss://your-surreal-host/rpc",
     namespace: process.env.DB_NAMESPACE ?? "general",
     database: process.env.DB_DATABASE ?? "general",
-    // Only needed for a remote db.path (ws://, wss://, http://, https://) — root/system auth or a token:
-    // auth: process.env.DB_TOKEN
-    //   ? process.env.DB_TOKEN
-    //   : process.env.DB_USERNAME && process.env.DB_PASSWORD
-    //     ? { username: process.env.DB_USERNAME, password: process.env.DB_PASSWORD }
-    //     : undefined,
+    // Root/system auth or a token — required for a remote db.path (ws://, wss://, http://, https://):
+    auth: process.env.DB_TOKEN
+      ? process.env.DB_TOKEN
+      : process.env.DB_USERNAME && process.env.DB_PASSWORD
+        ? { username: process.env.DB_USERNAME, password: process.env.DB_PASSWORD }
+        : undefined,
   },
   img: {
     hosts: process.env.IMG_HOSTS
